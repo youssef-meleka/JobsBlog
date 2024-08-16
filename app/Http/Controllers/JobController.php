@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Http\Requests\StoreJobRequest;
-use App\Http\Requests\UpdateJobRequest;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
@@ -13,7 +12,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        //
+        return Job::all();
     }
 
     /**
@@ -27,9 +26,18 @@ class JobController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreJobRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validated_fields = $request->validate([
+            'title'=>'required|max:255',
+            'salary'=>'required|numeric',
+            'location'=>'required|max:255',
+            'schedule'=>'required|max:255',
+            'url'=>'max:255',
+        ]);
+
+        $job = Job::create($validated_fields);
+        return $job;
     }
 
     /**
@@ -37,7 +45,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        //
+        return $job;
     }
 
     /**
@@ -51,9 +59,18 @@ class JobController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateJobRequest $request, Job $job)
+    public function update(Request $request, Job $job)
     {
-        //
+        $validated_fields = $request->validate([
+            'title'=>'required|max:255',
+            'salary'=>'required|numeric',
+            'location'=>'required|max:255',
+            'schedule'=>'required|max:255',
+            'url'=>'max:255',
+        ]);
+
+        $job->update($validated_fields);
+        return $job;
     }
 
     /**
@@ -61,6 +78,7 @@ class JobController extends Controller
      */
     public function destroy(Job $job)
     {
-        //
+        $job->delete();
+        return ['message'=>'this job was deleted'];
     }
 }
